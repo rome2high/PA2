@@ -1,7 +1,12 @@
-// ICS-462 Demo Code for PA2
-// By Michael Dorin
-// Metro State University
+//**********************************************************
+// Assignment: ICS-462-50 PA2 JAVA DIY Operating System
 //
+// Author: Romeo Mai
+//
+// Honor Code: I pledge that this program represents my own
+//   program code with the inspiration from Michael Dorin's works in designing and debugging my program.
+//*********************************************************
+
 import java.awt.Color;
 import java.awt.Graphics;
 import java.util.LinkedList;

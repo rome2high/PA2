@@ -1,3 +1,11 @@
+//**********************************************************
+// Assignment: ICS-462-50 PA2 JAVA DIY Operating System
+//
+// Author: Romeo Mai
+//
+// Honor Code: I pledge that this program represents my own
+//   program code with the inspiration from Michael Dorin's works in designing and debugging my program.
+//*********************************************************
 
 public class TaskControlBlock {
 	MyTask task;
@@ -6,7 +14,7 @@ public class TaskControlBlock {
 	
 	public TaskControlBlock(MyTask mytask, int priority){
 		this.task = mytask;
-		this.ready = true;
+		this.ready = false;
 		this.priority = priority;
 	}
 
