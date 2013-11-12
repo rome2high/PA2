@@ -3,7 +3,7 @@ import java.io.BufferedReader;
 import java.io.InputStreamReader;
 
 
-public class Br extends Thread implements Runnable{
+public class Br{
 	InputStreamReader ir = new InputStreamReader(System.in);
 	BufferedReader br =  new BufferedReader(ir);
 
@@ -19,7 +19,7 @@ public class Br extends Thread implements Runnable{
 		return s;
 	}
 
-	public void run() {
+	public void run(Kernel kernel, Painter painter) {
 		String myString = "";
 		while(true) {
 			myString =  getChar();
@@ -27,10 +27,10 @@ public class Br extends Thread implements Runnable{
 				System.out.println(myString);
 				//if(myString == "123"){
 					System.out.println("This is myString : " + myString);
-					Kernel kernel = new Kernel();
-					Painter painter = new Painter();
-					MovingShape ms = new MovingShape(10, 10, 15, 0, Color.RED, MovingShape.OVAL);
-					ms.setTimer(4);
+					//Kernel kernel = new Kernel();
+					//Painter painter = new Painter();
+					MovingShape ms = new MovingShape(10, 10, 25, 0, Color.RED, MovingShape.OVAL);
+					ms.setTimer(10);
 					painter.addShape(ms);
 					TaskControlBlock tcb = new TaskControlBlock(ms,0);
 					kernel.addTCB(tcb);
@@ -47,13 +47,4 @@ public class Br extends Thread implements Runnable{
 			}
 		}
 	}
-
-//	public static void main(String args[]) {
-//
-//	Br br = new Br();
-//
-//	br.myMain();
-//
-//	}
-	
 }
