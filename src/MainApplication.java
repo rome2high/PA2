@@ -15,6 +15,8 @@ import java.util.ArrayList;
 
 public class MainApplication {
 	
+	public static final int defaultTimer = 30;
+	public static final int defaultPriority = 3;
 	InputStreamReader ir = new InputStreamReader(System.in);
 	BufferedReader br =  new BufferedReader(ir);
 	ArrayList<TaskControlBlock> tcbList = new ArrayList<TaskControlBlock>(); //keep local tasks
@@ -53,28 +55,49 @@ public class MainApplication {
 
 		String myString = "";
 		while(true) {
+			painter.textArea.setText(painter.logText += " test \n");
 			myString =  getChar();
 			if (myString != null && !myString.isEmpty()){
-					System.out.println("This is myString : " + myString);
-
 					myString.trim();
 					String[] ar = myString.split(" ");
+					
+					if(ar.length < 2)
+					{
+						System.out.println("Error: Not Enough Argument!");
+						printUsage();
+						continue;
+					}
 					
 					int test = 0;
 					for(int i = 1; i < ar.length; i++){
 						try{
 							test = Integer.parseInt(ar[i]);
 						} catch (NumberFormatException e1){
-							printUsage();
-							ar[0] = "error";
+							System.err.println("Argument '" + ar[i] + "' must be an integer");
+							ar[0] = "Error";
 						}
 					}
 					
 					switch(ar[0].trim().toLowerCase()) {
 					case "autoadd":
-						
+						for (int i = 0; i < Integer.parseInt(ar[1]); i++){
+							if(tcbList.size() % 2 == 0){
+								ms = new MovingShape(10, 10, tcbList.size()*15, 0, Color.BLUE, MovingShape.RECTANGLE);
+							} else {
+								ms = new MovingShape(10, 10, tcbList.size()*15, 0, Color.RED, MovingShape.OVAL);
+							}
+							ms.setTimer(MainApplication.defaultTimer);
+							painter.addShape(ms);
+							tcb = new TaskControlBlock(ms,MainApplication.defaultPriority);
+							tcbList.add(tcb);
+						}
 						break;
 					case "add":
+						if(ar.length <= 2){		//must have 2 args
+							System.out.println("Error: Not Enough Argument!");
+							printUsage();
+							break;
+						}
 						if(tcbList.size() % 2 == 0){
 							ms = new MovingShape(10, 10, tcbList.size()*15, 0, Color.BLUE, MovingShape.RECTANGLE);
 						} else {
@@ -86,12 +109,24 @@ public class MainApplication {
 						tcbList.add(tcb);
 						break;
 					case "start":
+							if(Integer.parseInt(ar[1]) >= tcbList.size()){
+								System.out.println("No task number exist, try a number 1 - " + (tcbList.size()-1));
+								break;
+							}
 							kernel.addTCB(tcbList.get(Integer.parseInt(ar[1])));
+							System.out.println("Started task number " + ar[1]);
 						break;
 					case "stop":
+							if(Integer.parseInt(ar[1]) >= tcbList.size()){
+								System.out.println("No task number exist, try a number 1 - " + (tcbList.size()-1));
+								break;
+							}
 							kernel.removeTCB(tcbList.get(Integer.parseInt(ar[1])));
+							System.out.println("Stoped task number " + ar[1]);
 						break;
-					default: System.out.println("Invalid Input!");
+					default: 
+							System.out.println("Invalid Command!");
+							printUsage();
 						break;
 					}
 					
@@ -100,7 +135,8 @@ public class MainApplication {
 			}
 		
 			try {
-				Thread.sleep(2000);
+				Thread.sleep(100);
+				//Thread.sleep(2000);
 			} catch (InterruptedException e) {
 				e.printStackTrace();
 			}
@@ -108,9 +144,12 @@ public class MainApplication {
 	}
 	
 	private static void printUsage(){
-		System.out.println(" ADD TIMER(int) PRIORITY(int)" +
-				"\n START TASKNUMBER(int)" +
-				"\n STOP TASKNUMBER(int)" +
+		System.out.println(
+				"[USAGE]" +
+				"\nAUTOADD NumberOfTask(int)		-Add multiple tasks at once" +
+				"\nADD SetTimer(int) Priority(int)		-Add single task" +
+				"\nSTART TASKNUMBER(int)			-Start a task" +
+				"\nSTOP TASKNUMBER(int)			-Stop a task" +
 				"");
 	}
 
